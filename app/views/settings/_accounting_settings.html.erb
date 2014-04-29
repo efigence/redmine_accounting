@@ -1,0 +1,21 @@
+<p>
+<%= label_tag "role_id", l('accounting.opts.role') %>
+<%= select_tag "settings[role_id]", "<option value=""></option>".html_safe + options_from_collection_for_select(Role.all, 'id', 'name',  @settings['role_id']), :id => "role_id" %>
+</p>
+<p>
+<%= label_tag "role_id", l('accounting.opts.custom') %>
+<%= select_tag "settings[custom_field]", "<option value=""></option>".html_safe + options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings[:custom_field]), :id => "custom_fields" %>
+</p>
+
+ <h4><%= l('accounting.opts.groups') %></h4>
+<%= select_tag "settings[groups][]", options_from_collection_for_select(Group.all, 'id', 'lastname', @settings['groups']), :multiple => true, :class => 'selectize' %>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'selectize.min.js',   :plugin => 'redmine_accounting' %>
+  <%= stylesheet_link_tag 'selectize.default.css', :plugin => 'redmine_accounting' %>
+<% end %>
+
+<%= javascript_tag do %>
+  $('.settings').removeClass('tabular');
+  $('.selectize').selectize();
+<% end %>

@@ -1,0 +1,82 @@
+<h1 style="padding-bottom:20px;">Accounting plugin</h1>
+<div class="splitcontentleft" style="width:75%;">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Data zmiany</th>
+        <th>Nazwa</th>
+        <% if @custom_name %>
+          <th><%= @custom_name %></th>
+        <% end %>
+        <% if @role_name %>
+          <th><%= @role_name %></th>
+        <% end %>
+        <th>Ostatni raport</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @versions.each_with_index do |version, idx| %>
+        <% changes = @changes[idx] %>
+        <tr style="height:25px;" <%= highlight_if_reopened(changes[:status], version.status) %>>
+          <td style="width:15%"><%= version.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          <% if changes.has_key?(:name) %>
+            <td style="width:20%;"><%= show_name_changes(version.name, changes[:name], version.project_id) %></td>
+          <% else %>
+            <% if project = Project.find_by_id(version.project_id) %>
+              <td style="width:20%;"><%= link_to version.name, project_path(version.project) %></td>
+            <% else %>
+              <td style="width:20%;"><%= version.name %></td>
+            <% end %>
+          <% end %>
+          <% if @custom_name %>
+            <% if changes.has_key?(:custom_field) %>
+              <td style="width:15%;"><%= show_custom_changes(version.custom_field, changes[:custom_field]) %></td>
+            <% else %>
+              <td style="width:15%;"><%= version.custom_field %></td>
+            <% end %>
+          <% end %>
+          <% if @role_name %>
+            <td style="width:23%"><%= multi_user_link(version.user_ids, changes[:user_ids]) %></td>
+          <% end %>
+          <td style="width:18%"><%= time_entry_data(version.time_entry_id) %></td>
+          <% if changes.has_key?(:status) %>
+            <td style="width:20%"><%= show_status_changes(version.status, changes[:status]) %></td>
+          <% else %>
+            <td style="width:20%"><%= humanize_status(version.status) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p class="pagination" style="padding-top:12px;"><%= pagination_links_full @paginate %></p>
+</div>
+
+<div class="splitcontentright" style="width:20%;">
+  <fieldset>
+    <legend><%= l('accounting.filters.filters') %></legend>
+    <%= form_tag '/accounting', method: :get do %>
+      <p>
+        <b><%= label_tag :date_lookup, l('accounting.filters.date') %></b>
+        <%= text_field_tag :date_lookup, params[:date_lookup], :size => 13, :autocomplete => 'off', :class => "basic-text", :onchange => "this.form.submit(); return false;" %><%= calendar_for('date_lookup') %>
+      </p>
+      <p>
+        <b><%= label_tag :project_id, l('accounting.filters.project') %></b>
+        <%= select_tag :project_id, "<option value='all'>#{l('accounting.filters.all')}</option>".html_safe + options_from_collection_for_select(Project.all, "id", "name", selected: params[:project_id]), :include_blank => true, :class => 'selectize', :onchange => "this.form.submit(); return false;" %>
+      </p>
+    <% end %>
+    <div class="contextual">
+      <%= link_to l('accounting.filters.reset'), '/accounting', class: "icon icon-reload" %>
+    </div>
+  </fieldset>
+</div>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'accounting_styles.css', :plugin => 'redmine_accounting' %>
+  <%= javascript_include_tag 'selectize.min.js',   :plugin => 'redmine_accounting' %>
+  <%= stylesheet_link_tag 'selectize.default.css', :plugin => 'redmine_accounting' %>
+<% end %>
+
+<%= javascript_tag do %>
+  $('.selectize').selectize();
+<% end %>

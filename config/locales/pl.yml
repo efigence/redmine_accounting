@@ -1,0 +1,35 @@
+pl:
+  accounting:
+    opts:
+      role: Obserwowana rola
+      custom: Obserwowane pole niestandardowe
+      groups: Grupy mające dostęp do historii projektów
+
+    change_date: Data zmiany
+    name: Nazwa
+    last_report: Ostatni raport
+    status: Status
+
+    filters:
+      filters: filtry
+      date: Wybierz datę
+      project: Wybierz projekt
+      reset: Reset filtrów
+      all: Wszystkie
+
+    no_changes: Bez zmian
+    added: Dodano
+    deleted: Usunięto
+
+    was_added: został nadany
+    was_deleted: został usunięty
+    was_changed: został zmieniony z
+    to: na
+    name_changed: Nazwa została zmieniona z
+
+    project_was: Projekt został
+    open: otwarty
+    reopened: ponownie otwarty
+    closed: zamknięty
+    archived: zarchiwizowany
+    changed_state: Project zmienił stan z
