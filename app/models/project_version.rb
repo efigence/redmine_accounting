@@ -32,8 +32,6 @@ class ProjectVersion < ActiveRecord::Base
   end
 
   def observed_attrs
-    attributes.select do |k,_|
-      %w(name status user_ids custom_field).include?(k)
-    end
+    attributes.select { |k,_| self.class.observed.include?(k) }
   end
 end
