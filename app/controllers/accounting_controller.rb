@@ -4,12 +4,10 @@ class AccountingController < ApplicationController
   before_filter :permitted?
 
   def index
-    custom_field_id = Setting.plugin_redmine_accounting['custom_field']
-    role_id = Setting.plugin_redmine_accounting['role_id']
-    date = params.try(:[], :date_lookup).try(:to_time)
+    @role_name = get_role_name
+    @custom_name = get_custom_name
 
-    @custom_name = CustomField.select(:name).where(id: custom_field_id).first.name if !custom_field_id.blank?
-    @role_name = Role.select(:name).where(id: role_id).first.read_attribute(:name) + 's' if !role_id.blank?
+    date = params.try(:[], :date_lookup).try(:to_time)
 
     @versions = ProjectVersion.scoped.includes(:project)
     @versions = @versions.where(project_id: params[:project_id]) unless params[:project_id].blank? || params[:project_id] == 'all'
@@ -20,6 +18,17 @@ class AccountingController < ApplicationController
   end
 
   private
+
+  def get_custom_name
+    custom_field_id = Setting.plugin_redmine_accounting['custom_field']
+    !custom_field_id.blank? ? CustomField.select(:name).where(id: custom_field_id).first.try(:name) : nil
+  end
+
+  def get_role_name
+    role_id = Setting.plugin_redmine_accounting['role_id']
+    role = Role.select(:name).where(id: role_id).first if !role_id.blank?
+    role ? role.read_attribute(:name) + 's' : nil
+  end
 
   def permitted?
     deny_access unless User.current.admin? || has_access?
