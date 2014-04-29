@@ -26,9 +26,9 @@ class ProjectVersion < ActiveRecord::Base
   end
 
   def same_as_previous?
-    prev = previous
-    return false unless prev
-    observed_attrs == prev.observed_attrs
+    last = project.project_versions.first
+    return false unless last
+    observed_attrs == last.observed_attrs
   end
 
   def observed_attrs
