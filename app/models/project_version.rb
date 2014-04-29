@@ -13,8 +13,12 @@ class ProjectVersion < ActiveRecord::Base
   end
 
   def previous
-   ProjectVersion.where('id < :version_id AND project_id = :project_id',
-      {:version_id => self.id, :project_id => self.project_id}).first
+    if persisted?
+      ProjectVersion.where('id < :version_id AND project_id = :project_id',
+        {:version_id => self.id, :project_id => self.project_id}).first
+    else
+      project.project_versions.first
+    end
   end
 
   def changed_attrs
@@ -26,7 +30,7 @@ class ProjectVersion < ActiveRecord::Base
   end
 
   def same_as_previous?
-    last = project.project_versions.first
+    last = previous
     return false unless last
     observed_attrs == last.observed_attrs
   end
