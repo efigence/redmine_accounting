@@ -3,14 +3,14 @@ module AccountingHelper
     @same_ids, @new_ids, @deleted_ids = obtain_changes(user_ids, previous_ids)
     @str = ''
     modified_member_links(@same_ids) do
-     "<b><i>#{l('accounting.no_changes')}:</i></b><br />"
+     "<strong><em>#{l('accounting.no_changes')}:</em></strong><br />"
     end
     modified_member_links(@new_ids) do
-      s = "<b><i>#{l('accounting.added')}:</i></b><br />"
+      s = "<strong><em>#{l('accounting.added')}:</em></strong><br />"
       @same_ids.blank? ? s : s.prepend("<br />")
     end
     modified_member_links(@deleted_ids) do
-      s = "<b><i>#{l('accounting.deleted')}:</i></b><br />"
+      s = "<strong><em>#{l('accounting.deleted')}:</em></strong><br />"
       (@same_ids.blank? && @new_ids.blank?) ? s : s.prepend("<br />")
     end
     @str.html_safe
@@ -35,24 +35,22 @@ module AccountingHelper
 
   def show_custom_changes(current, previous)
     if previous.blank?
-      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_added')}: </p><p class='inline high-light'>#{current}</p>"
+      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_added')}: <em><strong>#{current}</strong></em></p>"
     elsif current.blank? && !previous.blank?
-      str = "<p class='inline'>#{@custom_name} </p><p class='inline high-light'>#{previous} </p>"
-      str << "<p class='inline'>#{l('accounting.was_deleted')}</p>"
+      str = "<p class='inline'>#{@custom_name}<em><strong> #{previous} </strong></em>#{l('accounting.was_deleted')}</p>"
     else
-      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_changed')} </p><p class='inline high-light'>#{previous}"
-      str << "<p class='inline'> #{l('accounting.to')} </p><p class='inline high-light'>#{current}</p>"
+      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_changed')} <em><strong>#{previous}</strong></em>"
+      str << " #{l('accounting.to')} <em><strong>#{current}</strong></em></p>"
     end
     str.html_safe
   end
 
   def show_name_changes(current, previous, project_id)
-    str = "<p class='inline'>#{l('accounting.name_changed')} </p><p class='inline high-light'>#{previous}"
-    str << "<p class='inline'> #{l('accounting.to')} </p>"
+    str = "<p class='inline'>#{l('accounting.name_changed')} <em><strong>#{previous}</strong></em> #{l('accounting.to')} </p>"
     if project = Project.find_by_id(project_id)
       str << link_to(current, project_path(project), :style => 'display:inline;', class: 'high-light')
     else
-      str << "<p class='high-light'>#{current}</p>"
+      str << "<p class='inline'><strong><em>#{current}</em></strong></p>"
     end
     str.html_safe
   end
@@ -63,13 +61,13 @@ module AccountingHelper
     # STATUS_ARCHIVED   = 9
     case
     when current == 1 && previous == 5
-      "<p>#{l('accounting.project_was')} <b><i>#{l('accounting.reopened')}</i><b></p>".html_safe
+      "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.reopened')}</em><strong></p>".html_safe
     when current == 5 && previous == 1
-      "<p>#{l('accounting.project_was')} <b><i>#{l('accounting.closed')}</i></b></p>".html_safe
+      "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.closed')}</em></strong></p>".html_safe
     when current == 1 && previous == 9
-      "<p>#{l('accounting.changed_state')} <b><i>#{l('accounting.archived')}</i></b> #{l('accounting.to')} <b><i>#{l('accounting.reopened')}</i></b></p>".html_safe
+      "<p>#{l('accounting.changed_state')} <strong><em>#{l('accounting.archived')}</em></strong> #{l('accounting.to')} <strong><em>#{l('accounting.reopened')}</em></strong></p>".html_safe
     when current == 9 && previous == 1
-      "<p>#{l('accounting.project_was')} <b><i>#{l('accounting.archived')}</i></b></p>".html_safe
+      "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.archived')}</em></strong></p>".html_safe
     end
   end
 

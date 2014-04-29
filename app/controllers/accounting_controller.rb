@@ -2,22 +2,24 @@ class AccountingController < ApplicationController
   unloadable
 
   before_filter :permitted?
+  before_filter :configurable_fields
 
   def index
-    @role_name = get_role_name
-    @custom_name = get_custom_name
-
     date = params.try(:[], :date_lookup).try(:to_time)
 
     @versions = ProjectVersion.scoped.includes(:project)
     @versions = @versions.where(project_id: params[:project_id]) unless params[:project_id].blank? || params[:project_id] == 'all'
     @versions = @versions.where(created_at: date..(date+1.day)) if date
     @paginate, @versions = paginate @versions, :per_page => 15
-
     @changes = @versions.map(&:changed_attrs)
   end
 
   private
+
+  def configurable_fields
+    @role_name = get_role_name
+    @custom_name = get_custom_name
+  end
 
   def get_custom_name
     custom_field_id = Setting.plugin_redmine_accounting['custom_field']

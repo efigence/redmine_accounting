@@ -58,7 +58,10 @@
     <%= form_tag '/accounting', method: :get do %>
       <p>
         <b><%= label_tag :date_lookup, l('accounting.filters.date') %></b>
-        <%= text_field_tag :date_lookup, params[:date_lookup], :size => 13, :autocomplete => 'off', :class => "basic-text", :onchange => "this.form.submit(); return false;" %><%= calendar_for('date_lookup') %>
+        <span style="white-space:nowrap;">
+          <%= text_field_tag :date_lookup, params[:date_lookup], :autocomplete => 'off', :class => "basic-text", :onchange => "this.form.submit(); return false;" %>
+          <%= calendar_for('date_lookup') %>
+        </span>
       </p>
       <p>
         <b><%= label_tag :project_id, l('accounting.filters.project') %></b>
