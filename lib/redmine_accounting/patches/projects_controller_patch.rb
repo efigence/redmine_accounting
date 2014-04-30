@@ -7,7 +7,7 @@ module RedmineAccounting
         base.class_eval do
           unloadable
           base.send(:include, InstanceMethods)
-          after_filter :save_parent_version, :only => [:reopen, :close]
+          after_filter :save_parent_version, :only => [:reopen, :close, :archive]
         end
       end
       module InstanceMethods
