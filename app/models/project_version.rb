@@ -39,6 +39,6 @@ class ProjectVersion < ActiveRecord::Base
   end
 
   def observed_attrs
-    attributes.select { |k,_| self.class.observed.include?(k) }
+    @observed_attrs ||= attributes.select { |k,_| self.class.observed.include?(k) }
   end
 end
