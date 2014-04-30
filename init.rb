@@ -5,6 +5,8 @@ Redmine::Plugin.register :redmine_accounting do
   author 'Jacek Grzybowski'
   description 'Plugin for accounting'
   version '0.0.1'
+  url 'https://github.com/efigence/redmine_accounting'
+  author_url 'http://www.efigence.com/'
 
   menu :top_menu, :accounting,
     { :controller => 'accounting', :action => 'index' },
