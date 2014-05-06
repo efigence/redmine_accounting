@@ -55,7 +55,7 @@
 <div class="splitcontentright" style="width:20%;">
   <fieldset>
     <legend><%= l('accounting.filters.filters') %></legend>
-    <%= form_tag '/accounting', method: :get do %>
+    <%= form_tag accounting_path, method: :get do %>
       <p>
         <b><%= label_tag :date_lookup, l('accounting.filters.date') %></b>
         <span style="white-space:nowrap;">
