@@ -8,7 +8,7 @@ module RedmineAccounting
           unloadable
           base.send(:include, InstanceMethods)
           has_many :project_versions
-          after_save :create_project_version, :if => Proc.new { |p| p.status != 5 }
+          after_save :create_project_version, :if => Proc.new { |p| p.status == Project::STATUS_ACTIVE }
         end
       end
       module InstanceMethods

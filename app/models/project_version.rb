@@ -32,10 +32,13 @@ class ProjectVersion < ActiveRecord::Base
   def same_as_previous?
     last = previous
     return false unless last
-    observed_attrs == last.observed_attrs
+    self.class.observed.each do |k|
+      return false unless observed_attrs[k] == last.observed_attrs[k]
+    end
+    true
   end
 
   def observed_attrs
-    attributes.select { |k,_| self.class.observed.include?(k) }
+    @observed_attrs ||= attributes.select { |k,_| self.class.observed.include?(k) }
   end
 end
