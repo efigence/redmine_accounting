@@ -10,6 +10,12 @@ class AccountingController < ApplicationController
     @versions = ProjectVersion.scoped.includes(:project)
     @versions = @versions.where(project_id: params[:project_id]) unless params[:project_id].blank? || params[:project_id] == 'all'
     @versions = @versions.where(created_at: date..(date+1.day)) if date
+
+    if !params[:change_type].blank?
+      ids = @versions.select! {|v| !(v.changed_attrs.keys & params[:change_type].map(&:to_sym)).blank?}.try(:map) {|v| v.id}
+      @versions = ProjectVersion.where(id: ids)
+    end
+
     @paginate, @versions = paginate @versions, :per_page => 15
     @changes = @versions.map(&:changed_attrs)
   end
@@ -19,6 +25,9 @@ class AccountingController < ApplicationController
   def configurable_fields
     @role_name = get_role_name
     @custom_name = get_custom_name
+    @selectable_statuses = [%w(name name), %w(status status)]
+    @selectable_statuses << [@role_name.downcase, "user_ids"] if @role_name
+    @selectable_statuses << [@custom_name.downcase, "custom_field"] if @custom_name
   end
 
   def get_custom_name

@@ -14,6 +14,7 @@ en:
       filters: filters
       date: Choose date
       project: Choose project
+      change_type: Change type
       reset: Reset filters
       all: All
 
@@ -30,6 +31,7 @@ en:
     project_was: Project was
     open: open
     reopened: reopened
+    created: created
     closed: closed
     archived: archived
     changed_state: Project changed state from

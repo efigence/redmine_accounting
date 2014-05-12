@@ -55,18 +55,19 @@ module AccountingHelper
     str.html_safe
   end
 
+  def show_created_info
+    "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.created')}</em><strong></p>".html_safe
+  end
+
   def show_status_changes(current, previous)
-    # STATUS_ACTIVE     = 1
-    # STATUS_CLOSED     = 5
-    # STATUS_ARCHIVED   = 9
     case
-    when current == 1 && previous == 5
+    when current == Project::STATUS_ACTIVE && previous == Project::STATUS_CLOSED
       "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.reopened')}</em><strong></p>".html_safe
-    when current == 5 && previous == 1
+    when current == Project::STATUS_CLOSED && previous == Project::STATUS_ACTIVE
       "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.closed')}</em></strong></p>".html_safe
-    when current == 1 && previous == 9
+    when current == Project::STATUS_ACTIVE && previous == Project::STATUS_ARCHIVED
       "<p>#{l('accounting.changed_state')} <strong><em>#{l('accounting.archived')}</em></strong> #{l('accounting.to')} <strong><em>#{l('accounting.reopened')}</em></strong></p>".html_safe
-    when current == 9 && previous == 1
+    when current == Project::STATUS_ARCHIVED && previous == Project::STATUS_ACTIVE
       "<p>#{l('accounting.project_was')} <strong><em>#{l('accounting.archived')}</em></strong></p>".html_safe
     end
   end

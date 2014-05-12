@@ -21,9 +21,13 @@ class ProjectVersion < ActiveRecord::Base
     end
   end
 
+  def first_instance?
+    !previous
+  end
+
   def changed_attrs
     prev_version = previous
-    return {} unless prev_version
+    return { :status => nil } unless prev_version
     attributes.keys.select{ |k| self.class.observed.include?(k) }.
       select{ |a| prev_version[a] != send(:[], a) }.
       inject({}){ |h, key| h[key] = prev_version[key]; h }.symbolize_keys

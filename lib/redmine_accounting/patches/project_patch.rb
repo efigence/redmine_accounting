@@ -41,7 +41,7 @@ module RedmineAccounting
             where(:member_roles => { :role_id => Setting.plugin_redmine_accounting['role_id'].to_i }).map(&:user_id)
         end
 
-        private :last_time_entry_id, :observed_custom_value, :observed_user_ids
+        private :create_project_version, :last_time_entry_id, :observed_custom_value, :observed_user_ids
 
       end
     end

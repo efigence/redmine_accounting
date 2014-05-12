@@ -12,7 +12,7 @@ module RedmineAccounting
       end
       module InstanceMethods
         def save_parent_version
-          @project.reload.create_project_version
+          @project.reload.send(:create_project_version)
         end
         private :save_parent_version
       end

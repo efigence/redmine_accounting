@@ -14,6 +14,7 @@ pl:
       filters: filtry
       date: Wybierz datę
       project: Wybierz projekt
+      change_type: Typ zmiany
       reset: Reset filtrów
       all: Wszystkie
 
@@ -30,6 +31,7 @@ pl:
     project_was: Projekt został
     open: otwarty
     reopened: ponownie otwarty
+    created: utworzony
     closed: zamknięty
     archived: zarchiwizowany
     changed_state: Project zmienił stan z

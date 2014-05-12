@@ -13,7 +13,7 @@ module RedmineAccounting
       end
       module InstanceMethods
         def save_project_version
-          member.project.create_project_version
+          member.project.send(:create_project_version)
         end
         def observed_role
           Setting.plugin_redmine_accounting['role_id'].to_i
