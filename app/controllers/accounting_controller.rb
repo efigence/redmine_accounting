@@ -6,6 +6,7 @@ class AccountingController < ApplicationController
 
   def index
     date = params.try(:[], :date_lookup).try(:to_time)
+    @selectable_statuses = [%w(name name), %w(status status), ['observed roles', 'user_ids'], ['custom fields', 'custom_field']]
 
     @versions = ProjectVersion.scoped.includes(:project)
     @versions = @versions.where(project_id: params[:project_id]) unless params[:project_id].blank? || params[:project_id] == 'all'
@@ -25,22 +26,11 @@ class AccountingController < ApplicationController
   def configurable_fields
     prepare_roles
     prepare_custom_fields
-
-    @selectable_statuses = [%w(name name), %w(status status)]
-    @selectable_statuses << [@role_name.downcase, "user_ids"] if @role_name
-    @selectable_statuses << [@custom_name.downcase, "custom_field"] if @custom_name
   end
 
-  # returns mapped names & ids of custom data to be displayed based on settings
-  # example: { "Developer" => "1", "Manager" => 2, "Reporter" => "3"}
   def prepare_dynamic_data(klass)
     ids = Setting.plugin_redmine_accounting["#{klass.name.underscore}_ids"]
-    ids.inject({}) do |hash, id|
-      instance = klass.find_by_id(id)
-      next unless instance
-      hash[instance.name] = instance.id.to_s
-      hash
-    end
+    klass.where(id: ids).inject({}){|h, obj| h[obj.name] = obj.id.to_s; h}
   end
 
   def prepare_roles

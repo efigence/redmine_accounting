@@ -7,8 +7,8 @@
 <%= select_tag "settings[custom_field_ids][]", options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings['custom_field_ids']), :multiple => true, :id => "custom_field_ids", :class => "selectize" %>
 </p>
 
-<%= label_tag "group_ids", l('accounting.opts.groups') %>
-<%= select_tag "settings[groups][]", options_from_collection_for_select(Group.all, 'id', 'lastname', @settings['groups']), :multiple => true, :class => 'selectize', :id => "group_ids" %>
+<%= label_tag "groups", l('accounting.opts.groups') %>
+<%= select_tag "settings[groups][]", options_from_collection_for_select(Group.all, 'id', 'lastname', @settings['groups']), :multiple => true, :class => 'selectize', :id => "groups" %>
 
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'selectize.min.js',   :plugin => 'redmine_accounting' %>

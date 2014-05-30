@@ -16,10 +16,9 @@ Redmine::Plugin.register :redmine_accounting do
      !(User.current.groups.pluck(:id).map(&:to_s) & (Setting.plugin_redmine_accounting['groups'] || [])).blank?
     }
 
-  # TODO:
   settings :default => {
-    'role_id' => '',
-    'custom_field' => '',
+    'role_ids' => [],
+    'custom_field_ids' => [],
     'groups' => []
   }, :partial => 'settings/accounting_settings'
 end

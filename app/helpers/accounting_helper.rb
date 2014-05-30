@@ -35,7 +35,7 @@ module AccountingHelper
 
   def show_custom_changes(current, previous)
     if previous.blank?
-      str = "<p class='inline'>#{l('accounting.was_added')}: <em><strong>#{current}</strong></em></p>"
+      str = "<p class='inline'><em><strong>#{current}</strong></em> #{l('accounting.was_added')}</p>"
     elsif current.blank? && !previous.blank?
       str = "<p class='inline'><em><strong> #{previous} </strong></em>#{l('accounting.was_deleted')}</p>"
     else
