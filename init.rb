@@ -4,7 +4,7 @@ Redmine::Plugin.register :redmine_accounting do
   name 'Redmine Accounting plugin'
   author 'Jacek Grzybowski'
   description 'Plugin for accounting'
-  version '0.0.1'
+  version '0.1.0'
   url 'https://github.com/efigence/redmine_accounting'
   author_url 'http://www.efigence.com/'
 

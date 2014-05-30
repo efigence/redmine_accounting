@@ -1,4 +1,4 @@
-class UpdateExisitngDataForCompatibility < ActiveRecord::Migration
+class UpdateExisitingDataForCompatibilty < ActiveRecord::Migration
   def up
     ###### run this to keep your data from version 0.0.1 ######
     ###########################################################
