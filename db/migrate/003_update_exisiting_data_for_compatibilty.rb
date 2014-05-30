@@ -9,8 +9,8 @@ class UpdateExisitingDataForCompatibilty < ActiveRecord::Migration
       return if role_id.blank? && custom_id.blank?
 
       ProjectVersion.all.each do |v|
-        v.user_ids = { role_id => v.user_ids } if role_id
-        v.custom_field = { custom_id => v.custom_field } if custom_id
+        v.user_ids = { role_id => v.user_ids } if role_id && v.user_ids
+        v.custom_field = { custom_id => v.custom_field } if custom_id && !v.custom_field.blank?
         v.save!
       end
     end
