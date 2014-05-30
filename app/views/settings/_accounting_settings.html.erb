@@ -4,7 +4,7 @@
 </p>
 <p>
 <%= label_tag "role_id", l('accounting.opts.custom') %>
-<%= select_tag "settings[custom_field]", "<option value=""></option>".html_safe + options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings[:custom_field]), :id => "custom_fields" %>
+<%= select_tag "settings[custom_field]", "<option value=""></option>".html_safe + options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings['custom_field']), :id => "custom_fields" %>
 </p>
 
  <h4><%= l('accounting.opts.groups') %></h4>
