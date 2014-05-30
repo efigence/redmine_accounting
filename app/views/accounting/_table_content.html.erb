@@ -1,0 +1,61 @@
+<div class="splitcontentleft" style="width:75%;">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Data zmiany</th>
+        <th>Nazwa</th>
+        <% @custom.keys.each do |custom_name| %>
+          <th><%= custom_name %><th>
+        <% end %>
+        <% @roles.keys.each do |role_name| %>
+          <th><%= role_name %>s<th>
+        <% end %>
+        <th>Ostatni raport</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @versions.each_with_index do |version, idx| %>
+        <% changes = @changes[idx] %>
+        <tr style="height:25px;" <%= highlight_if_reopened(changes[:status], version.status) %>>
+          <td style="width:15%"><%= version.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          <% if changes.has_key?(:name) %>
+            <td style="width:20%;"><%= show_name_changes(version.name, changes[:name], version.project_id) %></td>
+          <% else %>
+            <% if project = Project.find_by_id(version.project_id) %>
+              <td style="width:20%;"><%= link_to version.name, project_path(version.project) %></td>
+            <% else %>
+              <td style="width:20%;"><%= version.name %></td>
+            <% end %>
+          <% end %>
+
+          <% @custom.values.each do |custom_id| %>
+            <td style="width:15%;">
+              <% if changes[:custom_field] && (changes[:custom_field].try(:[], custom_id) != version.custom_field[custom_id]) %>
+                <%= show_custom_changes(version.custom_field[custom_id], changes[:custom_field].try(:[], custom_id)) %>
+              <% else %>
+                <%= version.custom_field.try(:[], custom_id) %>
+              <% end %>
+            </td>
+          <% end %>
+
+          <% @roles.values.each do |role_id| %>
+            <td style="width:23%">
+              <%= multi_user_link(version.user_ids[role_id], changes[:user_ids].try(:[], role_id)) %>
+            </td>
+          <% end %>
+
+          <td style="width:18%"><%= time_entry_data(version.time_entry_id) %></td>
+          <% if version.first_instance? %>
+            <td style="width:20%"><%= show_created_info %></td>
+          <% elsif !changes[:status].nil? %>
+            <td style="width:20%"><%= show_status_changes(version.status, changes[:status]) %></td>
+          <% else %>
+            <td style="width:20%"><%= humanize_status(version.status) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p class="pagination" style="padding-top:12px;"><%= pagination_links_full @paginate %></p>
+</div>

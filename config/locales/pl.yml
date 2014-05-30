@@ -1,8 +1,8 @@
 pl:
   accounting:
     opts:
-      role: Obserwowana rola
-      custom: Obserwowane pole niestandardowe
+      roles: Obserwowane role
+      custom_fields: Obserwowane pola niestandardowe
       groups: Grupy mające dostęp do historii projektów
 
     change_date: Data zmiany

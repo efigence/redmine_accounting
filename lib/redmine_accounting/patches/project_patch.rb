@@ -8,7 +8,7 @@ module RedmineAccounting
           unloadable
           base.send(:include, InstanceMethods)
           has_many :project_versions
-          after_save :create_project_version, :if => Proc.new { |p| p.status == Project::STATUS_ACTIVE }
+          after_save :create_project_version, :if => Proc.new { |p| p.active? }
         end
       end
       module InstanceMethods
@@ -17,8 +17,8 @@ module RedmineAccounting
             :name => name,
             :status => status,
             :project_id => id,
-            :user_ids => observed_user_ids,
-            :custom_field => observed_custom_value,
+            :user_ids => observed_roles,
+            :custom_field => observed_custom_fields,
             :time_entry_id => last_time_entry_id
           }
           version = project_versions.build(attrs)
@@ -30,19 +30,31 @@ module RedmineAccounting
           TimeEntry.where(project_id: id).last.try(:id)
         end
 
-        def observed_custom_value
-          custom_id = Setting.plugin_redmine_accounting['custom_field']
-          return nil if custom_id.blank?
-          custom_values.where(custom_field_id: custom_id.to_i).first.try(:value)
+        def observed_roles
+          observed_dynamically('role_ids') do |hash, id|
+            usr_ids = members.select(:user_id).joins(:member_roles).
+                        where(:member_roles => { :role_id => id }).map(&:user_id)
+            hash[id] = usr_ids
+          end
         end
 
-        def observed_user_ids
-          members.select(:user_id).joins(:member_roles).
-            where(:member_roles => { :role_id => Setting.plugin_redmine_accounting['role_id'].to_i }).map(&:user_id)
+        def observed_custom_fields
+          observed_dynamically('custom_field_ids') do |hash, id|
+            value = custom_values.where(custom_field_id: id).first.try(:value)
+            hash[id] = value unless value.blank?
+          end
         end
 
-        private :create_project_version, :last_time_entry_id, :observed_custom_value, :observed_user_ids
+        def observed_dynamically(setting_key, &block)
+          ids = Setting.plugin_redmine_accounting[setting_key]
+          return nil if ids.blank?
+          ids.inject({}) do |hash, id|
+            yield(hash, id)
+            hash
+          end
+        end
 
+        private :create_project_version, :last_time_entry_id, :observed_roles, :observed_custom_fields
       end
     end
   end

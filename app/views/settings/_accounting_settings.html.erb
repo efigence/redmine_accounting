@@ -1,14 +1,14 @@
 <p>
-<%= label_tag "role_id", l('accounting.opts.role') %>
-<%= select_tag "settings[role_id]", "<option value=""></option>".html_safe + options_from_collection_for_select(Role.all, 'id', 'name',  @settings['role_id']), :id => "role_id" %>
+<%= label_tag "role_ids", l('accounting.opts.roles') %>
+<%= select_tag "settings[role_ids][]", options_from_collection_for_select(Role.givable, 'id', 'name', @settings['role_ids']), :multiple => true, :id => "role_ids", :class => "selectize" %>
 </p>
 <p>
-<%= label_tag "role_id", l('accounting.opts.custom') %>
-<%= select_tag "settings[custom_field]", "<option value=""></option>".html_safe + options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings[:custom_field]), :id => "custom_fields" %>
+<%= label_tag "custom_field_ids", l('accounting.opts.custom_fields') %>
+<%= select_tag "settings[custom_field_ids][]", options_from_collection_for_select(CustomField.where(type: "ProjectCustomField"), 'id', 'name', @settings['custom_field_ids']), :multiple => true, :id => "custom_field_ids", :class => "selectize" %>
 </p>
 
- <h4><%= l('accounting.opts.groups') %></h4>
-<%= select_tag "settings[groups][]", options_from_collection_for_select(Group.all, 'id', 'lastname', @settings['groups']), :multiple => true, :class => 'selectize' %>
+<%= label_tag "group_ids", l('accounting.opts.groups') %>
+<%= select_tag "settings[groups][]", options_from_collection_for_select(Group.all, 'id', 'lastname', @settings['groups']), :multiple => true, :class => 'selectize', :id => "group_ids" %>
 
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'selectize.min.js',   :plugin => 'redmine_accounting' %>

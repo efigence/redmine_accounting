@@ -1,8 +1,8 @@
 en:
   accounting:
     opts:
-      role: Observed role
-      custom: Observed custom field
+      roles: Observed roles
+      custom_fields: Observed custom fields
       groups: Groups with access to projects history
 
     change_date: Change date

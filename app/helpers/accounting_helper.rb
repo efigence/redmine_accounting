@@ -35,11 +35,11 @@ module AccountingHelper
 
   def show_custom_changes(current, previous)
     if previous.blank?
-      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_added')}: <em><strong>#{current}</strong></em></p>"
+      str = "<p class='inline'>#{l('accounting.was_added')}: <em><strong>#{current}</strong></em></p>"
     elsif current.blank? && !previous.blank?
-      str = "<p class='inline'>#{@custom_name}<em><strong> #{previous} </strong></em>#{l('accounting.was_deleted')}</p>"
+      str = "<p class='inline'><em><strong> #{previous} </strong></em>#{l('accounting.was_deleted')}</p>"
     else
-      str = "<p class='inline'>#{@custom_name} #{l('accounting.was_changed')} <em><strong>#{previous}</strong></em>"
+      str = "<p class='inline'>#{l('accounting.was_changed')} <em><strong>#{previous}</strong></em>"
       str << " #{l('accounting.to')} <em><strong>#{current}</strong></em></p>"
     end
     str.html_safe

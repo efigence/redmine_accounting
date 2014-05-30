@@ -1,0 +1,26 @@
+<div class="splitcontentright" style="width:20%;">
+  <fieldset>
+    <legend><%= l('accounting.filters.filters') %></legend>
+    <%= form_tag accounting_path, method: :get do %>
+      <p>
+        <b><%= label_tag :date_lookup, l('accounting.filters.date') %></b>
+        <span style="white-space:nowrap;">
+          <%= text_field_tag :date_lookup, params[:date_lookup], :autocomplete => 'off', :class => "basic-text" %>
+          <%= calendar_for('date_lookup') %>
+        </span>
+      </p>
+      <p>
+        <b><%= label_tag :project_id, l('accounting.filters.project') %></b>
+        <%= select_tag :project_id, "<option value='all'>#{l('accounting.filters.all')}</option>".html_safe + options_from_collection_for_select(Project.all, "id", "name", selected: params[:project_id]), :include_blank => true, :class => 'selectize' %>
+      </p>
+      <p>
+        <b><%= label_tag 'change-type', l('accounting.filters.change_type') %></b>
+        <%= select_tag 'change_type[]', options_for_select(@selectable_statuses, params[:change_type]), :multiple => true, :class => 'selectize-with-btn', id: 'change-type' %>
+      </p>
+      <p><%= submit_tag l('label_search') %></p>
+    <% end %>
+    <div class="contextual">
+      <%= link_to l('accounting.filters.reset'), accounting_path, class: "icon icon-reload" %>
+    </div>
+  </fieldset>
+</div>

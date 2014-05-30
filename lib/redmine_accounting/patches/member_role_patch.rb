@@ -15,13 +15,15 @@ module RedmineAccounting
         def save_project_version
           member.project.send(:create_project_version)
         end
-        def observed_role
-          Setting.plugin_redmine_accounting['role_id'].to_i
+
+        def observed_role_ids
+          Setting.plugin_redmine_accounting['role_ids'].map(&:to_i)
         end
+
         def is_observed
-          observed_role == role_id
+          observed_role_ids.include?(role_id)
         end
-        private :observed_role, :is_observed
+        private :is_observed, :observed_role_ids
       end
     end
   end

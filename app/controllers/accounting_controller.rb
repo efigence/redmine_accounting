@@ -23,22 +23,32 @@ class AccountingController < ApplicationController
   private
 
   def configurable_fields
-    @role_name = get_role_name
-    @custom_name = get_custom_name
+    prepare_roles
+    prepare_custom_fields
+
     @selectable_statuses = [%w(name name), %w(status status)]
     @selectable_statuses << [@role_name.downcase, "user_ids"] if @role_name
     @selectable_statuses << [@custom_name.downcase, "custom_field"] if @custom_name
   end
 
-  def get_custom_name
-    custom_field_id = Setting.plugin_redmine_accounting['custom_field']
-    !custom_field_id.blank? ? CustomField.select(:name).where(id: custom_field_id).first.try(:name) : nil
+  # returns mapped names & ids of custom data to be displayed based on settings
+  # example: { "Developer" => "1", "Manager" => 2, "Reporter" => "3"}
+  def prepare_dynamic_data(klass)
+    ids = Setting.plugin_redmine_accounting["#{klass.name.underscore}_ids"]
+    ids.inject({}) do |hash, id|
+      instance = klass.find_by_id(id)
+      next unless instance
+      hash[instance.name] = instance.id.to_s
+      hash
+    end
   end
 
-  def get_role_name
-    role_id = Setting.plugin_redmine_accounting['role_id']
-    role = Role.select(:name).where(id: role_id).first if !role_id.blank?
-    role ? role.read_attribute(:name) + 's' : nil
+  def prepare_roles
+    @roles ||= prepare_dynamic_data(Role)
+  end
+
+  def prepare_custom_fields
+    @custom ||= prepare_dynamic_data(CustomField)
   end
 
   def permitted?
