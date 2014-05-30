@@ -2,16 +2,16 @@
   <table class="list">
     <thead>
       <tr>
-        <th>Data zmiany</th>
-        <th>Nazwa</th>
+        <th><%= l('accounting.change_date') %></th>
+        <th><%= l('accounting.name') %></th>
         <% @custom.keys.each do |custom_name| %>
           <th><%= custom_name %><th>
         <% end %>
         <% @roles.keys.each do |role_name| %>
           <th><%= role_name %>s<th>
         <% end %>
-        <th>Ostatni raport</th>
-        <th>Status</th>
+        <th><%= l('accounting.last_report') %></th>
+        <th><%= l('accounting.status') %></th>
       </tr>
     </thead>
     <tbody>
