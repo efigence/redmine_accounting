@@ -35,3 +35,4 @@ en:
     closed: closed
     archived: archived
     changed_state: Project changed state from
+    created_by: Changed by

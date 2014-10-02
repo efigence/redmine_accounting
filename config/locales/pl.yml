@@ -35,3 +35,4 @@ pl:
     closed: zamknięty
     archived: zarchiwizowany
     changed_state: Project zmienił stan z
+    created_by: Zmieniony przez

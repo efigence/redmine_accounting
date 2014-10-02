@@ -12,6 +12,7 @@
         <% end %>
         <th><%= l('accounting.last_report') %></th>
         <th><%= l('accounting.status') %></th>
+        <th><%= l('accounting.created_by') %></th>
       </tr>
     </thead>
     <tbody>
@@ -54,6 +55,16 @@
             <% else %>
               <%= humanize_status(version.status) %>
             <% end %>
+          </td>
+          <td>
+            <% if version.created_by %>
+              <% u = User.where(id: version.created_by).first %>
+              <% if u %>
+                <%= link_to u.name, u %>
+              <% else %>
+                <%= version.created_by %>
+              <% end -%>
+            <% end -%>
           </td>
         </tr>
       <% end %>

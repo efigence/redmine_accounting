@@ -23,6 +23,7 @@ module RedmineAccounting
           }
           version = project_versions.build(attrs)
           return if version.same_as_previous?
+          version.created_by = User.current.id if User.current
           version.save
         end
 
